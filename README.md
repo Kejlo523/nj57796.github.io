@@ -1,7 +1,7 @@
 # nj57796.github.io
 
-To repozytorium trzyma materiały rozdzielone na osobne branche.
+Repozytorium z materiałami na laboratoria `Podstawy technologii webowych`
 
-## Dostepne branche
+## Dostępne branche
 
 - `PTW-LAB-A` - aktualna zawartość laboratorium A: [przejdz do brancha](https://github.com/Kejlo523/nj57796.github.io/tree/PTW-LAB-A)
