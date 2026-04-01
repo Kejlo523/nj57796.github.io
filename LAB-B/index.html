@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Jędrzej Nowak (57796) - PTW LAB B</title>
+
+    <link rel="stylesheet" href="styles.css" type="text/css">
+    <script src="scripts.js" defer></script>
+</head>
+<body>
+    <main class="app">
+        <h1>Lista TODO</h1>
+        <p class="subtitle">Lista zadań do wykonania</p>
+
+        <section class="top-bar">
+            <label for="searchInput">Wyszukiwarka</label>
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Wpisz co najmniej 2 znaki"
+            >
+        </section>
+
+        <p id="message" class="message"></p>
+
+        <section id="taskList" class="task-list"></section>
+
+        <form id="addForm" class="add-form">
+            <label for="taskInput">Nowe zadanie</label>
+            <input
+                type="text"
+                id="taskInput"
+                maxlength="255"
+                placeholder="Np. kupić chleb"
+            >
+
+            <label for="dateInput">Termin wykonania</label>
+            <input type="datetime-local" id="dateInput">
+
+            <button type="submit">Dodaj zadanie</button>
+        </form>
+    </main>
+</body>
+</html>
