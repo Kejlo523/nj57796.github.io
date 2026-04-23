@@ -12,23 +12,7 @@ function getIconUrl(code) {
   return "https://openweathermap.org/img/wn/" + code + "@2x.png";
 }
 
-function formatForecastDate(text) {
-  const date = new Date(text);
 
-  return date.toLocaleDateString("pl-PL", {
-    weekday: "short",
-    day: "2-digit",
-    month: "2-digit"
-  }) + " " + date.toLocaleTimeString("pl-PL", {
-    hour: "2-digit",
-    minute: "2-digit"
-  });
-}
-
-function clearResults() {
-  weatherResult.innerHTML = "";
-  forecastResult.innerHTML = "";
-}
 
 function showError(text) {
   weatherResult.innerHTML = '<div class="error-msg">' + text + "</div>";
