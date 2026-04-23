@@ -1,78 +1,165 @@
-document.getElementById('weatherBtn').addEventListener('click', function() {
-    const address = document.getElementById('address').value;
+const API_KEY = "2a0d23c90f6487ed9a2ec5842663378a";
+const BASE_URL = "https://api.openweathermap.org/data/2.5";
 
-    function getWeatherIcon(description) {
-        switch (description.toLowerCase()) {
-            case 'bezchmurnie':
-                return '☀️'; // Słońce
-            case 'kilka chmur':
-                return '🌤️'; // Słońce z chmurami
-            case 'rozproszone chmury':
-                return '⛅'; // Rozproszone chmury
-            case 'zachmurzenie umiarkowane':
-                return '☁️'; // Chmury
-            case 'zachmurzenie duże':
-                return '☁️'; // Duże chmury
-            case 'przelotny deszcz':
-                return '🌦️'; // Deszcz z słońcem
-            case 'deszcz':
-                return '🌧️'; // Deszcz
-            case 'burza':
-                return '⛈️'; // Burza
-            case 'śnieg':
-                return '❄️'; // Śnieg
-            case 'mgła':
-                return '🌫️'; // Mgła
-            case 'lekki deszcz':
-                return '🌦️'; // Lekki deszcz
-            case 'umiarkowany deszcz':
-                return '🌧️'; // Umiarkowany deszcz
-            case 'silny deszcz':
-                return '🌧️'; // Silny deszcz
-            case 'śnieg z deszczem':
-                return '🌨️'; // Śnieg z deszczem
-            default:
-                return '🌤️'; // Domyślna ikonka dla nieznanych opisów
-        }
+const addressInput = document.getElementById("address");
+const weatherBtn = document.getElementById("weatherBtn");
+const weatherResult = document.getElementById("weatherResult");
+const forecastResult = document.getElementById("forecastResult");
+const suggestionsList = document.getElementById("suggestions");
+const recentSection = document.getElementById("recentSection");
+
+function getIconUrl(code) {
+  return "https://openweathermap.org/img/wn/" + code + "@2x.png";
+}
+
+function formatForecastDate(text) {
+  const date = new Date(text);
+
+  return date.toLocaleDateString("pl-PL", {
+    weekday: "short",
+    day: "2-digit",
+    month: "2-digit"
+  }) + " " + date.toLocaleTimeString("pl-PL", {
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+}
+
+function clearResults() {
+  weatherResult.innerHTML = "";
+  forecastResult.innerHTML = "";
+}
+
+function showError(text) {
+  weatherResult.innerHTML = '<div class="error-msg">' + text + "</div>";
+  forecastResult.innerHTML = "";
+}
+
+function showLoading() {
+  weatherResult.innerHTML = '<div class="status-msg">Pobieranie danych...</div>';
+  forecastResult.innerHTML = "";
+}
+
+function createWeatherCard(data) {
+  const card = document.createElement("div");
+  card.className = "weather-card";
+
+  card.innerHTML = `
+    <div class="weather-icon-wrap">
+      <img src="${getIconUrl(data.weather[0].icon)}" alt="Ikona pogody">
+    </div>
+    <div class="card-info">
+      <h2 class="city-name">${data.name}</h2>
+      <div class="temp-main">${Math.round(data.main.temp)}°C</div>
+      <p class="desc-text">${data.weather[0].description}</p>
+      <div class="details-row">
+        <span class="detail-item">Wilgotność: ${data.main.humidity}%</span>
+        <span class="detail-item">Wiatr: ${data.wind.speed} m/s</span>
+        <span class="detail-item">Odczuwalna: ${Math.round(data.main.feels_like)}°C</span>
+      </div>
+    </div>
+  `;
+
+  return card;
+}
+
+function createForecastCard(item) {
+  const card = document.createElement("div");
+  card.className = "forecast-card";
+
+  card.innerHTML = `
+    <div class="forecast-top">
+      <img src="${getIconUrl(item.weather[0].icon)}" alt="Ikona pogody">
+      <div class="forecast-main">
+        <h3>${formatForecastDate(item.dt_txt)}</h3>
+        <p class="forecast-desc">${item.weather[0].description}</p>
+      </div>
+    </div>
+    <div class="forecast-bottom">
+      <div class="forecast-temp">${Math.round(item.main.temp)}°C</div>
+      <div class="forecast-extra">
+        <p>Odczuwalna: ${Math.round(item.main.feels_like)}°C</p>
+        <p>Wilgotność: ${item.main.humidity}%</p>
+      </div>
+    </div>
+  `;
+
+  return card;
+}
+
+function loadCurrentWeather(city) {
+  const xhr = new XMLHttpRequest();
+  const url = BASE_URL + "/weather?q=" + encodeURIComponent(city) + "&units=metric&lang=pl&appid=" + API_KEY;
+
+  xhr.open("GET", url);
+  xhr.onload = function () {
+    if (xhr.status !== 200) {
+      showError("Nie udało się pobrać bieżącej pogody.");
+      return;
     }
 
+    const data = JSON.parse(xhr.responseText);
+    console.log(data);
+    weatherResult.innerHTML = "";
+    weatherResult.appendChild(createWeatherCard(data));
+  };
 
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', `https://api.openweathermap.org/data/2.5/weather?q=${address}&units=metric&lang=pl&appid=2a0d23c90f6487ed9a2ec5842663378a`);
-    xhr.send();
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            console.log(xhr.responseText);
-            let weatherData = JSON.parse(xhr.responseText);
-            console.log(weatherData);
-            let WeatherCard = document.createElement('div');
-            WeatherCard.classList.add('weather-card');
-            let icon = getWeatherIcon(weatherData.weather[0].description);
-            WeatherCard.innerHTML = `
-                <h2>${weatherData.name} ${icon}</h2>
-                <p>Temperatura: ${weatherData.main.temp} °C</p>
-                <p>Pogoda: ${weatherData.weather[0].description}</p>
-            `;
-            document.getElementById('weatherResult').appendChild(WeatherCard);
-        }
-    };
+  xhr.onerror = function () {
+    showError("Błąd połączenia z pogodą bieżącą.");
+  };
 
+  xhr.send();
+}
 
-    fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${address}&units=metric&lang=pl&appid=2a0d23c90f6487ed9a2ec5842663378a`)
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            // wyświetl 5 ostatnich z api
-            for (let i = 0; i < 5; i++) {
-                let forecastCard = document.createElement('div');
-                forecastCard.classList.add('forecast-card');
-                let icon = getWeatherIcon(data.list[i].weather[0].description);
-                forecastCard.innerHTML = `
-                    <h3>${data.list[i].dt_txt} ${icon}</h3>
-                    <p>Temperatura: ${data.list[i].main.temp} °C</p>
-                    <p>Pogoda: ${data.list[i].weather[0].description}</p>
-                `;
-                document.getElementById('forecastResult').appendChild(forecastCard);
-            }
-        });
+function loadForecast(city) {
+  const url = BASE_URL + "/forecast?q=" + encodeURIComponent(city) + "&units=metric&lang=pl&appid=" + API_KEY;
+
+  fetch(url)
+    .then(function (response) {
+      if (!response.ok) {
+        throw new Error("Nie udało się pobrać prognozy.");
+      }
+
+      return response.json();
+    })
+    .then(function (data) {
+      console.log(data);
+      forecastResult.innerHTML = "";
+
+      for (let i = 0; i < 5 && i < data.list.length; i += 1) {
+        forecastResult.appendChild(createForecastCard(data.list[i]));
+      }
+    })
+    .catch(function () {
+      forecastResult.innerHTML = '<div class="error-msg">Nie udało się pobrać prognozy.</div>';
+    });
+}
+
+function getWeather() {
+  const city = addressInput.value.trim();
+
+  if (city.length === 0) {
+    showError("Wpisz nazwę miasta.");
+    return;
+  }
+
+  showLoading();
+  loadCurrentWeather(city);
+  loadForecast(city);
+}
+
+weatherBtn.addEventListener("click", getWeather);
+
+addressInput.addEventListener("keydown", function (event) {
+  if (event.key === "Enter") {
+    getWeather();
+  }
 });
+
+if (suggestionsList) {
+  suggestionsList.innerHTML = "";
+}
+
+if (recentSection) {
+  recentSection.style.display = "none";
+}
