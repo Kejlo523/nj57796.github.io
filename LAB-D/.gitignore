@@ -1,2 +1,5 @@
 *
 !.gitignore
+!index.html
+!styles.css
+!scripts.js
