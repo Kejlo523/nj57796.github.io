@@ -64,27 +64,19 @@ function createWeatherCard(data) {
 }
 
 function createForecastCard(item) {
-  const card = document.createElement("div");
-  card.className = "forecast-card";
+  const row = document.createElement("div");
+  row.className = "forecast-row";
 
-  card.innerHTML = `
-    <div class="forecast-top">
-      <img src="${getIconUrl(item.weather[0].icon)}" alt="Ikona pogody">
-      <div class="forecast-main">
-        <h3>${formatForecastDate(item.dt_txt)}</h3>
-        <p class="forecast-desc">${item.weather[0].description}</p>
-      </div>
-    </div>
-    <div class="forecast-bottom">
-      <div class="forecast-temp">${Math.round(item.main.temp)}°C</div>
-      <div class="forecast-extra">
-        <p>Odczuwalna: ${Math.round(item.main.feels_like)}°C</p>
-        <p>Wilgotność: ${item.main.humidity}%</p>
-      </div>
-    </div>
-  `;
+  const date = new Date(item.dt_txt);
+  var dayName = date.toLocaleDateString("pl-PL", { weekday: "short" });
 
-  return card;
+  row.innerHTML =
+    '<img src="' + getIconUrl(item.weather[0].icon) + '" alt="Ikona pogody">' +
+    '<div class="fc-day">' + dayName + '</div>' +
+    '<div class="fc-desc">' + item.weather[0].description + '</div>' +
+    '<div class="fc-temp">' + Math.round(item.main.temp) + '°C</div>';
+
+  return row;
 }
 
 function loadCurrentWeather(city) {
