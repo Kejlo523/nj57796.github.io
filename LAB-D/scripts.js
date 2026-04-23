@@ -74,6 +74,7 @@ function createForecastCard(item) {
     '<img src="' + getIconUrl(item.weather[0].icon) + '" alt="Ikona pogody">' +
     '<div class="fc-day">' + dayName + '</div>' +
     '<div class="fc-desc">' + item.weather[0].description + '</div>' +
+    '<div class="fc-humidity">💧' + item.main.humidity + '%</div>' +
     '<div class="fc-temp">' + Math.round(item.main.temp) + '°C</div>';
 
   return row;

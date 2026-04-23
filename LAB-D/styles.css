@@ -295,6 +295,13 @@ h3 {
   text-overflow: ellipsis;
 }
 
+.fc-humidity {
+  font-size: 12px;
+  color: #6a9fd8;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
 .fc-temp {
   font-size: 16px;
   font-weight: 700;
