@@ -119,7 +119,7 @@ function loadForecast(city) {
       console.log(data);
       forecastResult.innerHTML = "";
 
-      for (let i = 0; i < 5 && i < data.list.length; i += 1) {
+      for (let i = 0; i < 5; i++) {
         forecastResult.appendChild(createForecastCard(data.list[i]));
       }
     })
