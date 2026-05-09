@@ -1,2 +1,8 @@
 *
 !.gitignore
+!index.php
+!autoload.php
+!phpinfo.php
+!yaml.php
+!lib/
+!lib/**
