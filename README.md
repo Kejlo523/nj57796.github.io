@@ -10,3 +10,4 @@ Repozytorium z zadaniami na laboratoria `Podstawy technologii webowych`
 - [Laboratorium D](https://kejlo523.github.io/nj57796.github.io/LAB-D)
 - [Laboratorium E](https://github.com/Kejlo523/nj57796.github.io/tree/main/LAB-E)
 - [Laboratorium F](https://github.com/Kejlo523/nj57796.github.io/tree/main/LAB-F)
+- [Laboratorium G](https://github.com/Kejlo523/nj57796.github.io/tree/main/LAB-G)
